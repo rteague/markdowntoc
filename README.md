@@ -4,7 +4,7 @@
 ```bash
 Generates a 'Table of Contents' for Markdown files.
 
-usage: Markdown Table of Contents [-h] [--root ROOT] path
+usage: mdtoc.py [-h] [--root ROOT] path
 
 Generates a table of contents section for your *.md files
 

@@ -72,7 +72,6 @@ def main():
     class arg_namespace():pass
     argn = arg_namespace() 
     parser = argparse.ArgumentParser(
-        prog = 'Markdown Table of Contents',
         description = 'Generates a table of contents section for your *.md files',
         epilog = 'by Rashaud Teague'
     )
