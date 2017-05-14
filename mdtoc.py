@@ -31,7 +31,7 @@ class MDTOC(object):
     def is_section(self, s):
         """ returns None if failed match else, the MatchObject
         """
-        regex_str  = r"^(#{1,6})(?!#)([^\n]*)$"
+        regex_str  = "^(#{1,6})(?!#)([^\n]*)$"
         # section regex, section name extracted from the data
         sect_regex = re.compile(regex_str)
         return sect_regex.match(s)
@@ -43,6 +43,7 @@ class MDTOC(object):
         prev_sect_header = root
         prev_indent = 0
         indent = 0
+        sections = list()
         data_size = len(data)
         if data_size > 0:
             self.toc = ''
@@ -51,7 +52,7 @@ class MDTOC(object):
             sect = self.is_section(data[i])
             if sect:
                 sect_name = sect.group(2).strip()
-                sect_header = len(sect.group(1))
+                sect_header = len(sect.group(1)) 
                 if sect_header < root: continue
                 if sect_header == root:
                     indent = 0
@@ -60,8 +61,18 @@ class MDTOC(object):
                 elif sect_header > prev_sect_header:
                     indent = prev_indent + 1
                 elif sect_header < prev_sect_header:
-                    indent = prev_indent - 1
-                indent_str = "  "*indent
+                    indent = 1
+                    i = len(sections) - 1
+                    while i >= 0:
+                        if sect_header == sections[i]['header']:
+                            indent = sections[i]['indent']
+                            break
+                        if sect_header > sections[i]['header']:
+                            indent = sections[i]['indent'] + 1
+                            break
+                        i = i - 1
+                indent_str = ".."*indent
+                sections.append({'indent': indent, 'header': sect_header})
                 anchor = sect_name.replace(' ','-').lower()
                 anchor = re.sub(r"[^-a-z0-9_]", "", anchor)
                 self.toc = "%s%s* [%s](#%s)\n" % (self.toc, indent_str, sect_name, anchor)
