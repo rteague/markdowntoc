@@ -71,7 +71,7 @@ class MDTOC(object):
                             indent = sections[i]['indent'] + 1
                             break
                         i = i - 1
-                indent_str = ".."*indent
+                indent_str = "  "*indent
                 sections.append({'indent': indent, 'header': sect_header})
                 anchor = sect_name.replace(' ','-').lower()
                 anchor = re.sub(r"[^-a-z0-9_]", "", anchor)
