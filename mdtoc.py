@@ -2,7 +2,7 @@
 
 # mark down table of contents generator
 
-import re, argparse, sys, collections
+import re, argparse, sys
 
 def readfile(path):
     contents = None
@@ -74,7 +74,7 @@ class MDTOC(object):
                 indent_str = "  "*indent
                 sections.append({'indent': indent, 'header': sect_header})
                 anchor = sect_name.replace(' ','-').lower()
-                anchor = re.sub(r"[^-a-z0-9_]", "", anchor)
+                anchor = re.sub("[^-a-z0-9_]", "", anchor)
                 self.toc = "%s%s* [%s](#%s)\n" % (self.toc, indent_str, sect_name, anchor)
                 prev_sect_header = sect_header
                 prev_indent = indent
