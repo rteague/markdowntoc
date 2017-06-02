@@ -19,6 +19,11 @@ def readfile(path):
     return contents
 
 class MDTOC(object):
+    # section regex, section name extracted from the data
+    sect_regex = re.compile("^(#{1,6})(?!#)([^\n]*)")
+    # two spaces for the indent
+    indent_char = "  "
+    
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
         # table of contents (toc)
@@ -31,10 +36,7 @@ class MDTOC(object):
     def is_section(self, s):
         """ returns None if failed match else, the MatchObject
         """
-        regex_str  = "^(#{1,6})(?!#)([^\n]*)$"
-        # section regex, section name extracted from the data
-        sect_regex = re.compile(regex_str)
-        return sect_regex.match(s)
+        return MDTOC.sect_regex.match(s)
     
     def buildtoc(self, data):
         """ data is a list type
@@ -71,7 +73,7 @@ class MDTOC(object):
                             indent = sections[i]['indent'] + 1
                             break
                         i = i - 1
-                indent_str = "  "*indent
+                indent_str = MDTOC.indent_char*indent
                 sections.append({'indent': indent, 'header': sect_header})
                 anchor = sect_name.replace(' ','-').lower()
                 anchor = re.sub("[^-a-z0-9_]", "", anchor)
@@ -89,10 +91,6 @@ def main():
     parser.add_argument('--root', nargs = 1, type = int, help = 'the starting depth, example 2 = ##')
     parser.add_argument('path', nargs = 1)
     parser.parse_args(namespace = argn)
-    
-    if len(sys.argv) == 1:
-        parser.print_help()
-        sys.exit(1)
     
     kwargs = vars(argn)
     toc = MDTOC(**kwargs)
